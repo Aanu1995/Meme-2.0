@@ -26,13 +26,11 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     let topTextFieldDelegate = TopTextFieldDelegate()
     let bottomTextFieldDelegate = BottomTextFieldDelegate()
     
-    // MARK: Static Properties
+    // MARK: Property
+    static let identifier = "MemeEditorViewController"
     static let topPlaceholderText:String = "TOP"
     static let bottomPlaceholderText: String = "BOTTOM"
     static var activeTextField: UITextField!
-    
-    // MARK: Properties
-    
     var isKeyboardShown = false // implemented due to notification bug in IOS simulator
     
     
@@ -103,11 +101,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     @IBAction func cancel(_ sender: Any) {
-//        imageView.image = nil
-//        topTextField.text = MemeEditorViewController.topPlaceholderText
-//        bottomTextField.text = MemeEditorViewController.bottomPlaceholderText
-//        shareBarButton.isEnabled = false
-        self.dismiss(animated: true, completion: nil)
+      self.dismiss(animated: true, completion: nil)
     }
 }
 

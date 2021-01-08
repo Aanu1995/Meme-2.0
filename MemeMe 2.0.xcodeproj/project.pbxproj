@@ -20,6 +20,7 @@
 		CEB1C65A25A8E81900A87A91 /* BottomTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB1C65925A8E81900A87A91 /* BottomTextFieldDelegate.swift */; };
 		CEB1C65E25A8E8A100A87A91 /* MemeEditorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB1C65D25A8E8A100A87A91 /* MemeEditorHelper.swift */; };
 		CEB1C66325A8EAC900A87A91 /* Meme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB1C66225A8EAC900A87A91 /* Meme.swift */; };
+		CEB1C66725A8F92100A87A91 /* MemeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB1C66625A8F92100A87A91 /* MemeDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		CEB1C65925A8E81900A87A91 /* BottomTextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomTextFieldDelegate.swift; sourceTree = "<group>"; };
 		CEB1C65D25A8E8A100A87A91 /* MemeEditorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeEditorHelper.swift; sourceTree = "<group>"; };
 		CEB1C66225A8EAC900A87A91 /* Meme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meme.swift; sourceTree = "<group>"; };
+		CEB1C66625A8F92100A87A91 /* MemeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 				CEB1C64825A8CC0600A87A91 /* MemeCollectionViewController.swift */,
 				CEB1C64F25A8E5EB00A87A91 /* MemeEditorViewController.swift */,
 				CEB1C63625A8C95500A87A91 /* MemeTableViewController.swift */,
+				CEB1C66625A8F92100A87A91 /* MemeDetailViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -200,6 +203,7 @@
 				CEB1C65625A8E7E500A87A91 /* TopTextFieldDelegate.swift in Sources */,
 				CEB1C65025A8E5EB00A87A91 /* MemeEditorViewController.swift in Sources */,
 				CEB1C66325A8EAC900A87A91 /* Meme.swift in Sources */,
+				CEB1C66725A8F92100A87A91 /* MemeDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -18,13 +18,16 @@ class MemeTableViewController: UIViewController, Helper {
         super.viewWillAppear(animated)
         configure(navigationItem: self.navigationItem, addMemeSelector: #selector(createMeme))
     }
+}
 
+
+
+extension MemeTableViewController{
     @objc func createMeme(){
-        let controller = storyboard?.instantiateViewController(identifier: "MemeEditorViewController") as! MemeEditorViewController
+        let controller = storyboard?.instantiateViewController(identifier:
+        MemeEditorViewController.identifier) as! MemeEditorViewController
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
      }
-    
-    
 }
 
