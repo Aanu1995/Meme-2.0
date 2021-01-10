@@ -1,7 +1,6 @@
 
-import Foundation
-import UIKit
 
+import UIKit
 
 struct Meme{
     let topText: String
@@ -9,3 +8,4 @@ struct Meme{
     let originalImage: UIImage
     let memedImage: UIImage
 }
+

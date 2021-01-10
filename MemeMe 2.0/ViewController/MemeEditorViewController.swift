@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, MemeEditorHelper{
+class MemeEditorViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, Helper{
     
     // MARK: IBOutlets
 
@@ -21,17 +21,12 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     @IBOutlet weak var bottomToolBar: UIToolbar!
     @IBOutlet weak var topToolBar: UIToolbar!
     
-    // MARK: TextField Delegates
-    
-    let topTextFieldDelegate = TopTextFieldDelegate()
-    let bottomTextFieldDelegate = BottomTextFieldDelegate()
+
     
     // MARK: Property
     static let identifier = "MemeEditorViewController"
-    static let topPlaceholderText:String = "TOP"
-    static let bottomPlaceholderText: String = "BOTTOM"
-    static var activeTextField: UITextField!
-    var isKeyboardShown = false // implemented due to notification bug in IOS simulator
+    let topPlaceholderText:String = "TOP"
+    let bottomPlaceholderText: String = "BOTTOM"
     
     
     override func viewDidLoad() {
@@ -42,12 +37,9 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         // disable share button because image is nil
         shareBarButton.isEnabled = false
         
-        topTextField.delegate = topTextFieldDelegate
-        bottomTextField.delegate = bottomTextFieldDelegate
+        configureTextField(topTextField, withText: topPlaceholderText)
         
-        configureTextField(topTextField, withText: MemeEditorViewController.topPlaceholderText)
-        
-        configureTextField(bottomTextField, withText: MemeEditorViewController.bottomPlaceholderText)
+        configureTextField(bottomTextField, withText: bottomPlaceholderText)
         
         subscribeToKeyboardNotifications(showKeyboardSelector: #selector(keyboardWillShow(_:)), hideKeyboardSelector: #selector(keyboardWillHide))
         
@@ -55,12 +47,13 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     
     
     deinit {
-       unSubscribeFromKeyboardNotifications()
+        NotificationCenter.default.removeObserver(self)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         if let image = info[.originalImage] as? UIImage{
+            imageView.contentMode = .scaleAspectFit
             imageView.image = image
             // enabled the share button
             shareBarButton.isEnabled = true;
@@ -89,6 +82,12 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
             if completed && error == nil {
                 // save the meme object
                 self.save(memedImage)
+                
+                // notify to update
+                MemeNotification.notify(name: MemeTableViewController.notificationName)
+                MemeNotification.notify(name: MemeCollectionViewController.notificationName)
+                
+                self.dismiss(animated: true, completion: nil)
             }
         }
         
@@ -103,34 +102,14 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     @IBAction func cancel(_ sender: Any) {
       self.dismiss(animated: true, completion: nil)
     }
-}
-
-
-// MARK: Extension on MemeViewController
-extension MemeEditorViewController{
     
     @objc func keyboardWillHide(){
-        isKeyboardShown = false
         view.frame.origin.y = 0.0
     }
     
     @objc func keyboardWillShow(_ notification: Notification){
-        if(notification.name == UIResponder.keyboardWillShowNotification && !isKeyboardShown){
-            let keyBoardHeight = getKeyboardHeight(notification)
-            
-            if let activeField = MemeEditorViewController.activeTextField {
-                let realActiveTextFieldFrame = activeField.convert(activeField.frame, to: self.view)
-                
-                let textFieldHeightDiff = realActiveTextFieldFrame.origin.y - realActiveTextFieldFrame.height
-                let keyboardHeightDiff = self.view.frame.height - keyBoardHeight
-               
-                let viewMoveDiff = keyboardHeightDiff - textFieldHeightDiff
-                
-                if viewMoveDiff < 0 {
-                    isKeyboardShown = true
-                    view.frame.origin.y -= keyBoardHeight
-                }
-            }
+        if bottomTextField.isEditing{
+            view.frame.origin.y = -getKeyboardHeight(notification)
         }
     }
     
@@ -143,6 +122,7 @@ extension MemeEditorViewController{
         let controller = UIImagePickerController()
         
         controller.delegate = self
+       // controller.allowsEditing = true
         controller.sourceType = sourceType
         
         present(controller, animated: true, completion: nil)
@@ -175,6 +155,26 @@ extension MemeEditorViewController{
     func save(_ memedImage: UIImage) {
         // Create the meme
         let meme = Meme(topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage: imageView.image!, memedImage: memedImage)
-        print(meme.bottomText)
+        
+        // Add it to the memes array in the Application Delegate
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.memes.append(meme)
     }
 }
+
+
+extension MemeEditorViewController{
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if(textField.text == topPlaceholderText || textField.text == bottomPlaceholderText){
+            textField.text = ""
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
+
